@@ -1,0 +1,7 @@
+{
+	"graphics":{		
+		"blueprint_packages":{
+			"mn_weapon_package":"graphics/icons/cargo/mn_weapon_package.png",
+		},
+	},
+}

@@ -1,0 +1,50 @@
+{
+  "id": "mn_rim116",
+  "specClass": "projectile",
+  "projectileSpecId": "mn_aim9",
+  "type": "MISSILE",
+  "size": "SMALL",
+  "turretSprite": "graphics/weapons/mn_rim116_turret_base.png",
+  "hardpointSprite": "graphics/weapons/mn_rim116_turret_base.png",
+  "turretOffsets": [
+    16.5,
+    -0.5,
+    16.5,
+    1,
+    16.5,
+    -2
+  ],
+  "turretAngleOffsets": [
+    0,
+    0,
+    0
+  ],
+  "hardpointOffsets": [
+    17,
+    -0.5
+  ],
+  "hardpointAngleOffsets": [
+    0
+  ],
+  "barrelMode": "ALTERNATING",
+  "animationType": "SMOKE",
+  "autocharge": true,
+  "smokeSpec": {
+    "particleSizeMin": 10,
+    "particleSizeRange": 10,
+    "cloudParticleCount": 3,
+    "cloudDuration": 1,
+    "cloudRadius": 5,
+    "blowbackParticleCount": 3,
+    "blowbackDuration": 2,
+    "blowbackLength": 5,
+    "blowbackSpread": 5,
+    "particleColor": [
+      100,
+      100,
+      100,
+      200
+    ]
+  },
+  "fireSoundTwo": "amsrm_fire"
+}

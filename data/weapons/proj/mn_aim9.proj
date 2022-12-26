@@ -1,0 +1,27 @@
+{
+	"id":"mn_aim9",
+	"specClass":"missile",	
+	"missileType":"MISSILE",
+	"sprite":"graphics/missiles/mn_aim9.png",
+	"size":[3,19],	
+	"center":[1.5,9.5],
+	"collisionRadius":12,
+	"collisionClass":"MISSILE_NO_FF",
+	"explosionColor":[255,165,50,255],
+	"explosionRadius":15,
+	"maxFlightTime":1.1,
+	#"flameoutTime":1.5,
+	"engineSpec":{
+                "turnAcc":980,
+                "turnRate":490,
+                "acc":694,
+                "dec":0},		  
+	"engineSlots":[
+                {"id":"ES1",
+                "loc":[-10, 0],
+                "style":"MISSILE_LOW_TECH",
+				"width":4.0,
+				"length":10.0,
+				"angle":180.0
+                }]
+}

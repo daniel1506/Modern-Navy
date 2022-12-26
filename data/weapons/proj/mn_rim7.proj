@@ -1,0 +1,27 @@
+{
+	"id":"mn_rim7",
+	"specClass":"missile",	
+	"missileType":"MISSILE",
+	"sprite":"graphics/missiles/mn_rim7.png",
+	"size":[5,24],	
+	"center":[2.5,12],
+	"collisionRadius":25,
+	"collisionClass":"MISSILE_NO_FF",
+	"explosionColor":[255,165,50,255],
+	"explosionRadius":30,
+	"maxFlightTime":1.4,
+	#"flameoutTime":1.5,
+	"engineSpec":{
+                "turnAcc":980,
+                "turnRate":490,
+                "acc":1182,
+                "dec":0},		  
+	"engineSlots":[
+                {"id":"ES1",
+                "loc":[-11, 0],
+                "style":"MISSILE_LOW_TECH",
+				"width":4.0,
+				"length":15.0,
+				"angle":180.0
+                }]
+}

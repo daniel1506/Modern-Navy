@@ -1,0 +1,27 @@
+{
+	"id":"mn_sm3",
+	"specClass":"missile",	
+	"missileType":"MISSILE",
+	"sprite":"graphics/missiles/mn_sm3.png",
+	"size":[7,31],	
+	"center":[3.5,15],
+	"collisionRadius":35,
+	"collisionClass":"MISSILE_NO_FF",
+	"explosionColor":[255,165,50,255],
+	"explosionRadius":35,
+	"maxFlightTime":1.3,
+	#"flameoutTime":1.5,
+	"engineSpec":{
+                "turnAcc":490,
+                "turnRate":245,
+                "acc":2994.5,
+                "dec":0},		  
+	"engineSlots":[
+                {"id":"ES1",
+                "loc":[-15, 0],
+                "style":"MISSILE_LOW_TECH",
+				"width":4.0,
+				"length":25.0,
+				"angle":180.0
+                }]
+}

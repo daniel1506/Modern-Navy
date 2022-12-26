@@ -1,0 +1,27 @@
+{
+	"id":"mn_essm",
+	"specClass":"missile",	
+	"missileType":"MISSILE",
+	"sprite":"graphics/missiles/mn_essm.png",
+	"size":[7,22],	
+	"center":[3.5,11],
+	"collisionRadius":25,
+	"collisionClass":"MISSILE_NO_FF",
+	"explosionColor":[255,165,50,255],
+	"explosionRadius":30,
+	"maxFlightTime":1.4,
+	#"flameoutTime":1.5,
+	"engineSpec":{
+                "turnAcc":980,
+                "turnRate":490,
+                "acc":1361,
+                "dec":0},		  
+	"engineSlots":[
+                {"id":"ES1",
+                "loc":[-10, 0],
+                "style":"MISSILE_LOW_TECH",
+				"width":4.0,
+				"length":15.0,
+				"angle":180.0
+                }]
+}
