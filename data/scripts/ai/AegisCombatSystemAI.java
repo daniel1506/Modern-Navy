@@ -230,7 +230,7 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 		if (this.weapon.isDisabled()) {
 			return;
 		}
-		if (this.weapon.useAmmo()) {
+		if (this.weapon.usesAmmo() ) {
 			if (this.weapon.getAmmo() == 0) {
 				return;
 			}
@@ -240,7 +240,7 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 		//}
 		WeaponAPI currentWeapon = (WeaponAPI) this.engine.getCustomData().get(this.ship.toString() + this.weapon.getId());
 		if (this.ship.getWeaponGroupFor(currentWeapon) != this.ship.getSelectedGroupAPI() && !currentWeapon.isDisabled()) {
-			if (currentWeapon.useAmmo()) {
+			if (currentWeapon.usesAmmo()) {
 				if (this.weapon.getAmmo() > 0) {
 					return;
 				}
