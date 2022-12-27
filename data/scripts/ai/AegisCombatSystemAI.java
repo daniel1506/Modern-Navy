@@ -74,7 +74,7 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 		}
 		
 		this.checkIsAutoFire();
-		this.updateTracks();
+		this.updateTracks();		
 		
 		if (this.targetShip != null && this.weapon == (WeaponAPI) this.engine.getCustomData().get(this.ship.toString() + this.weapon.getId())) {
 			this.fireTimer.advance(amount);
@@ -226,14 +226,27 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 		}
 	}
 	
-	public void checkIsAutoFire() {
-		if (this.ship != this.engine.getPlayerShip()) {
+	public void checkIsAutoFire() {		
+		if (this.weapon.isDisabled()) {
 			return;
 		}
-		if (this.ship.getWeaponGroupFor((WeaponAPI) this.engine.getCustomData().get(this.ship.toString() + this.weapon.getId())) != this.ship.getSelectedGroupAPI()) {
-			return;
+		if (this.weapon.useAmmo()) {
+			if (this.weapon.getAmmo() == 0) {
+				return;
+			}
 		}
-		
+		//if (this.ship != this.engine.getPlayerShip()) {
+		//	return;
+		//}
+		WeaponAPI currentWeapon = (WeaponAPI) this.engine.getCustomData().get(this.ship.toString() + this.weapon.getId());
+		if (this.ship.getWeaponGroupFor(currentWeapon) != this.ship.getSelectedGroupAPI() && !currentWeapon.isDisabled()) {
+			if (currentWeapon.useAmmo()) {
+				if (this.weapon.getAmmo() > 0) {
+					return;
+				}
+			}
+			return;
+		}		
 		this.engine.getCustomData().put(this.ship.toString() + this.weapon.getId(), this.weapon);
 		return;
 	}

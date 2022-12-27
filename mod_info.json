@@ -1,10 +1,20 @@
 {
 	"id":"mn", # required code id
 	"name":"Modern Navy Mod", # required friendly name
-	"version":"0.0.1", # required mod version
+	"version":"0.1.0", # required mod version
 	"description":"Modern Navy Mod", # required friendly mod description
 	"gameVersion":"0.95.1a-RC6", # required starsector version this was designed for
 	"author":"BeyondTheHorizon", # author's name
+	"dependencies": [
+        	{
+            	"id": "lw_lazylib",
+            	"name": "LazyLib",
+        	},
+        	{
+            	"id": "MagicLib",
+            	"name": "MagicLib",
+        	},
+    	],
 	"utility":"false", # utility toggle
 	"totalConversion":"false", # total conversion toggle
 	#"jars":["jars/Modern_Navy.jar"],
