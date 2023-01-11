@@ -30,7 +30,7 @@ import org.lazywizard.lazylib.combat.CombatUtils;
 import data.scripts.util.MagicRender;
 import data.scripts.util.MagicTargeting;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
 {
@@ -122,12 +122,14 @@ public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
 		if (this.target != null && this.target instanceof MissileAPI) {
 			if (!this.isMissileAlive((MissileAPI) this.target)) {
 				//log.info("Lost Track " + this.target + " (" + this.missile + ")");
+				
 				this.selfDestruct(this.missile, this.engine);
 				return;
 			}
 		}
         float dist = MathUtils.getDistanceSquared(this.missile.getLocation(), this.target.getLocation());
         if (dist < Math.pow(this.missile.getSpec().getExplosionRadius(), 2) && this.target instanceof MissileAPI && this.missile.getDamageType() != DamageType.KINETIC) {
+		//if (dist < Math.pow(this.missile.getSpec().getExplosionRadius(), 2) && this.target instanceof MissileAPI) {
             this.proximityFuse();
             return;
         }
@@ -152,8 +154,13 @@ public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
             this.missile.giveCommand(ShipCommand.TURN_LEFT);
         }
         if (Math.abs(aimAngle) < 45.0f) {
-            this.missile.giveCommand(ShipCommand.ACCELERATE);
+			this.missile.giveCommand(ShipCommand.ACCELERATE);      
         }
+		//if (this.missile.getDamageType() == DamageType.KINETIC && MathUtils.getDistanceSquared(this.missile.getLocation(), this.target.getLocation()) < 40000) {
+			//this.missile.setFacing(Misc.getAngleInDegrees(this.missile.getLocation(), this.target.getLocation()));
+			//this.missile.setFacing(this.missile.getFacing() + aimAngle);
+			//this.missile.getVelocity().set(this.missile.getVelocity().length() * (float) Math.sin(Math.toRadians(this.missile.getFacing())), this.missile.getVelocity().length() * (float) Math.cos(Math.toRadians(this.missile.getFacing())));
+		//}
         if (Math.abs(aimAngle) < Math.abs(this.missile.getAngularVelocity()) * 0.05f) {
             this.missile.setAngularVelocity(aimAngle / 0.05f);
         }

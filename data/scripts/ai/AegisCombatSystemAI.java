@@ -26,7 +26,7 @@ import com.fs.starfarer.api.util.Misc;
 import org.lazywizard.lazylib.combat.CombatUtils;
 import data.scripts.util.MagicTargeting;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 public class AegisCombatSystemAI implements AutofireAIPlugin {
 	

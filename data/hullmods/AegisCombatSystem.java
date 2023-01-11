@@ -30,14 +30,12 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import data.scripts.ai.AegisCombatSystemAI;
 
 import org.lazywizard.lazylib.combat.CombatUtils;
-import com.dp.advancedgunnerycontrol.weaponais.SpecificAIPluginBase;
-import com.dp.advancedgunnerycontrol.weaponais.suffixes.SuffixBase;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 public class AegisCombatSystem extends BaseHullMod {
 
-	public Logger log = Logger.getLogger(this.getClass());
+	//public Logger log = Logger.getLogger(this.getClass());
 	
 	private CombatEngineAPI engine;				
 	private static List<String> missileList = new ArrayList<String>();
