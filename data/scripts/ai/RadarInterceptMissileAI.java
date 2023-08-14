@@ -27,8 +27,8 @@ import org.lazywizard.lazylib.VectorUtils;
 import org.lazywizard.lazylib.combat.AIUtils;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.combat.CombatUtils;
-import data.scripts.util.MagicRender;
-import data.scripts.util.MagicTargeting;
+import org.magiclib.util.MagicRender;
+import org.magiclib.util.MagicTargeting;
 
 //import org.apache.log4j.Logger;
 
@@ -81,8 +81,10 @@ public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
 						return;
 					} else if (this.engine.getCustomData().containsKey(m.toString()) && this.isMissileAlive(m)) {
 						for (MissileAPI b : (List<MissileAPI>) this.engine.getCustomData().get(m.toString())) {
-							if (b.getWeaponSpec().getWeaponId() == m.getWeaponSpec().getWeaponId()) {
+							if (b != null && this.isMissileAlive(b) && b.getWeaponSpec().getWeaponId() == this.missile.getWeaponSpec().getWeaponId()) {
+							//if (b.getWeaponSpec().getWeaponId() == m.getWeaponSpec().getWeaponId()) {
 								//log.info("Filter " + m + " (" + this.missile + ")");
+								//log.info("Ran");
 								continue findTargetLoop;
 							}
 						}
@@ -90,7 +92,7 @@ public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
 						birds = (List<MissileAPI>) this.engine.getCustomData().get(m.toString());					
 						this.setTarget((CombatEntityAPI) m);
 						this.missile.setFacing(Misc.getAngleInDegrees(this.missile.getLocation(), this.target.getLocation()));
-						//log.info("Kill Track2 " + m + " with " + this.missile);
+						//log.info("Kill Track2 " + m + " with " + this.missile + " " + this.missile.getWeaponSpec().getWeaponId());
 						birds.add(this.missile);	
 						this.nextLauncher();
 						return;

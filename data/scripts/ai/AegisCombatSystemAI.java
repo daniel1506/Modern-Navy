@@ -24,7 +24,7 @@ import com.fs.starfarer.api.combat.AutofireAIPlugin;
 import com.fs.starfarer.api.util.Misc;
 
 import org.lazywizard.lazylib.combat.CombatUtils;
-import data.scripts.util.MagicTargeting;
+import org.magiclib.util.MagicTargeting;
 
 //import org.apache.log4j.Logger;
 
@@ -81,7 +81,7 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 		}
 		
 		if (this.targetMissile == null) {
-			this.tempTargetMissile = MagicTargeting.randomMissile((CombatEntityAPI)this.ship, MagicTargeting.missilePriority.DAMAGE_PRIORITY, this.weapon.getLocation(), this.weapon.getArcFacing(), Integer.valueOf(weaponArc), Integer.valueOf((int) this.weapon.getRange()));
+			this.tempTargetMissile = MagicTargeting.randomMissile((CombatEntityAPI)this.ship, MagicTargeting.missilePriority.DAMAGE_PRIORITY, this.weapon.getLocation(), this.weapon.getArcFacing(), Integer.valueOf(weaponArc), Integer.valueOf((int) this.weapon.getRange() + 200));
 			if (this.isTargetMissileValid(this.tempTargetMissile)) {
 				this.targetMissile = this.tempTargetMissile;
 				return;
@@ -193,9 +193,12 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 		}
 		if (this.isInterceptMissile(missile)) {
 			return false;
-		}
+		}		
 		if (this.engine.getCustomData().containsKey(missile.toString())) {
 			for (MissileAPI m : (List<MissileAPI>) this.engine.getCustomData().get(missile.toString())) {
+				if (this.isMissileAlive(m) && m.getSourceAPI() == this.ship) {
+					return false;
+				}
 				if (m.getWeaponSpec().getWeaponId() == this.weapon.getId()) {
 					return false;
 				}
@@ -288,13 +291,22 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 	
 	public float getMinLaunchDist() {
 		if (this.weapon.getId().equals("mn_sm3")) {
+			if (!this.engine.getCustomData().containsKey(this.ship.toString() + "mn_sm6")) {
+				if (!this.engine.getCustomData().containsKey(this.ship.toString() + "mn_essm")) {
+					return 200f;
+				}
+				return 600f;
+			}
 			return 1300f;
 		}
 		if (this.weapon.getId().equals("mn_sm6")) {
+			if (!this.engine.getCustomData().containsKey(this.ship.toString() + "mn_essm")) {
+				return 150f;
+			}
 			return 600f;
 		}
 		if (this.weapon.getId().equals("mn_essm")) {
-			return 100f;
+			return 150f;
 		}
 		return 0f;
 	}

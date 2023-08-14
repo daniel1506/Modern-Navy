@@ -1,12 +1,10 @@
 package data.hullmods;
 
 import java.lang.String;
-import java.lang.Math;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
-import org.lwjgl.util.vector.Vector2f;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.BaseModPlugin;
