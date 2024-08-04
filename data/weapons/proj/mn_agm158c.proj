@@ -1,24 +1,25 @@
 {
 	"id":"mn_agm158c",
 	"specClass":"missile",	
-	"missileType":"MISSILE",
+	"missileType":"HEATSEEKER",
 	"sprite":"graphics/missiles/mn_agm158.png",
+	"onFireEffect":"data.scripts.combat.MNStealthMissileOnFireEffect",
 	"size":[7,22],	
 	"center":[3.5,11],
 	"collisionRadius":26,
 	"collisionClass":"NONE",
 	"explosionColor":[255,165,50,255],
 	"explosionRadius":40,
-	"maxFlightTime":5.1,
-	#"flameoutTime":1.5,
+	#"maxFlightTime":15,
 	"engineSpec":{
-                "turnAcc":196,
+                #"turnAcc":196,
+		"turnAcc":300,
                 "turnRate":98,
                 "acc":480,
                 "dec":0},		  
 	"engineSlots":[
                 {"id":"ES1",
-                "loc":[-10, 0],
+                "loc":[-11, 0],
                 "style":"CUSTOM",
 		"styleSpec":{
 				"mode":"QUAD_STRIP", # PARTICLES or QUAD_STRIP, determines which params are used

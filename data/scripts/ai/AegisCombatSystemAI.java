@@ -1,22 +1,16 @@
 package data.scripts.ai;
 
 import java.lang.String;
-import java.lang.Integer;
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
 import com.fs.starfarer.api.combat.CombatEntityAPI;
-import com.fs.starfarer.api.combat.MutableShipStatsAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
-import com.fs.starfarer.api.combat.ShipAPI.HullSize;
 import com.fs.starfarer.api.combat.WeaponAPI;
 import com.fs.starfarer.api.combat.WeaponAPI.AIHints;
-import com.fs.starfarer.api.combat.WeaponGroupAPI;
 import com.fs.starfarer.api.combat.MissileAPI;
 import com.fs.starfarer.api.combat.GuidedMissileAI;
 import com.fs.starfarer.api.combat.CollisionClass;
@@ -24,289 +18,378 @@ import com.fs.starfarer.api.combat.AutofireAIPlugin;
 import com.fs.starfarer.api.util.Misc;
 
 import org.lazywizard.lazylib.combat.CombatUtils;
-import org.magiclib.util.MagicTargeting;
+import org.lazywizard.lazylib.combat.WeaponUtils;
 
 //import org.apache.log4j.Logger;
 
 public class AegisCombatSystemAI implements AutofireAIPlugin {
-	
-	//public Logger log = Logger.getLogger(this.getClass());
-	
+
+	// public Logger log = Logger.getLogger(this.getClass());
+
+	public static final String prefix = "acs";
+
 	private CombatEngineAPI engine;
 	private WeaponAPI weapon;
+	private String weaponId;
+	private String weaponUid;
 	private ShipAPI ship;
+	private String shipUid;
+
 	private MissileAPI targetMissile;
 	private ShipAPI targetShip;
-	private boolean isForceOff = false;	
-	private MissileAPI tempTargetMissile;
-	private int weaponArc = 360;
-	
-	private IntervalUtil fireTimer = new IntervalUtil(1f, 1.5f);
-	private List<MissileAPI> tracks = new ArrayList<MissileAPI>();
+	private boolean isForceOff = false;
+
+	public List<MissileAPI> missileTrackList = new ArrayList<MissileAPI>();
+	public List<ShipAPI> fighterTrackList = new ArrayList<ShipAPI>();
 
 	public AegisCombatSystemAI(final WeaponAPI weapon, final ShipAPI ship) {
 		this.weapon = weapon;
-		this.ship = ship;
-    }
-	
-	public void advance(float amount) {
+		this.weaponUid = weapon.toString();
+		this.weaponId = weapon.getId();
 
-		if (Global.getCombatEngine().isPaused()) {
-            return;
-        }
-		if (this.engine != Global.getCombatEngine()) {
-            this.engine = Global.getCombatEngine();
-        }
-		if (!this.engine.getCustomData().containsKey(this.weapon.toString())) {
-			this.engine.getCustomData().put(this.weapon.toString(), this.tracks);
-		}
-		if (!this.engine.getCustomData().containsKey(this.ship.toString() + this.weapon.getId())) {
-			this.engine.getCustomData().put(this.ship.toString() + this.weapon.getId(), this.weapon);
-		}
-		if (!this.engine.getCustomData().containsKey(this.ship.toString() + this.weapon.getId() + "list") ) {
-			List<WeaponAPI> weapons = new ArrayList<WeaponAPI>();
-			for (WeaponAPI w: this.ship.getAllWeapons()) {
-				if (w.getId() == this.weapon.getId()) {
-					weapons.add(w);
-				}
-			}
-			this.engine.getCustomData().put(this.ship.toString() + this.weapon.getId() + "list", weapons);			
-		}
-		
-		this.checkIsAutoFire();
-		this.updateTracks();		
-		
-		if (this.targetShip != null && this.weapon == (WeaponAPI) this.engine.getCustomData().get(this.ship.toString() + this.weapon.getId())) {
-			this.fireTimer.advance(amount);
-		}
-		
-		if (this.targetMissile == null) {
-			this.tempTargetMissile = MagicTargeting.randomMissile((CombatEntityAPI)this.ship, MagicTargeting.missilePriority.DAMAGE_PRIORITY, this.weapon.getLocation(), this.weapon.getArcFacing(), Integer.valueOf(weaponArc), Integer.valueOf((int) this.weapon.getRange() + 200));
-			if (this.isTargetMissileValid(this.tempTargetMissile)) {
-				this.targetMissile = this.tempTargetMissile;
-				return;
-			}
-			if (!this.isTargetMissileValid(this.tempTargetMissile)) {
-				this.tempTargetMissile = MagicTargeting.randomMissile((CombatEntityAPI)this.ship, MagicTargeting.missilePriority.RANDOM, this.weapon.getLocation(), this.weapon.getArcFacing(), Integer.valueOf(weaponArc), Integer.valueOf((int) this.weapon.getRange()));
-				if (this.isTargetMissileValid(this.tempTargetMissile)) {
-					this.targetMissile = this.tempTargetMissile;
-					return;
-				}
-			}		
-		}
-		else if (this.targetMissile != null) {
-			if (!this.isTargetMissileValid(this.targetMissile)) {
-				this.targetMissile = null;
-				return;
-			}
-		}
-		
-		if (this.targetShip == null) {
-			if (this.weapon.hasAIHint(AIHints.ANTI_FTR)) {
-				this.targetShip = MagicTargeting.pickShipTarget(this.ship, MagicTargeting.targetSeeking.FULL_RANDOM , Integer.valueOf((int) this.weapon.getRange()), Integer.valueOf(weaponArc), Integer.valueOf(100), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));				
-				if (this.targetShip != null) {
-					return;
-				};
-			}
-			if (this.weapon.hasAIHint(AIHints.PD_ONLY)) {
-				this.targetShip = null;
-				return;
-			}
-			this.targetShip = MagicTargeting.pickShipTarget(this.ship, MagicTargeting.targetSeeking.LOCAL_RANDOM , Integer.valueOf((int) this.weapon.getRange()), Integer.valueOf(weaponArc), Integer.valueOf(25), Integer.valueOf(25), Integer.valueOf(25), Integer.valueOf(25), Integer.valueOf(25));
-		}
-		if (this.targetShip != null) {
-			if (!this.targetShip.isAlive() || Misc.getDistance(this.weapon.getLocation(), this.targetShip.getLocation()) > this.weapon.getRange()) {
-				this.targetShip = null;
-				return;
-			}
-		}
-		return;
+		this.ship = ship;
+		this.shipUid = ship.toString();
 	}
-	
+
+	public void advance(float amount) {
+		if (this.engine != Global.getCombatEngine()) {
+			this.initSystem();
+			return;
+		}
+
+		if (this.engine.isPaused() || this.weapon == null) {
+			return;
+		}
+
+		// Update tracks of this weapon, check the function for more detail
+		this.updateTracks();
+
+		if (this.targetMissile != null) {
+			if (!this.isTargetMissileValid(this.targetMissile, true)) {
+				this.targetMissile = null;
+			}
+		}
+
+		if (this.targetShip != null) {
+			if (!this.isTargetShipValid(targetShip)) {
+				this.targetShip = null;
+			}
+		}
+
+		if (this.engine.getCustomData().containsKey(prefix + this.shipUid + this.weaponId)) {
+			if (this.weapon == (WeaponAPI) this.engine.getCustomData().get(prefix + this.shipUid + this.weaponId)) {
+				if (this.isWeaponAvailable(this.weapon)) {
+					if (this.targetMissile == null && this.targetShip == null) {
+						this.searchTarget();
+					}
+				} else {
+					this.updateActiveWeapon();
+				}
+			}
+		}
+	}
+
 	public void forceOff() {
 		this.isForceOff = true;
 		return;
 	}
-	
+
 	public Vector2f getTarget() {
 		if (this.targetMissile != null) {
-			return this.engine.getAimPointWithLeadForAutofire((CombatEntityAPI) this.ship, 1f, (CombatEntityAPI) this.targetMissile, this.weapon.getProjectileSpeed());
+			return this.engine.getAimPointWithLeadForAutofire((CombatEntityAPI) this.ship, 1f,
+					(CombatEntityAPI) this.targetMissile, this.weapon.getProjectileSpeed());
 		} else if (this.targetShip != null) {
-			return this.engine.getAimPointWithLeadForAutofire((CombatEntityAPI) this.ship, 1f, (CombatEntityAPI) this.targetShip, this.weapon.getProjectileSpeed());
+			return this.engine.getAimPointWithLeadForAutofire((CombatEntityAPI) this.ship, 1f,
+					(CombatEntityAPI) this.targetShip, this.weapon.getProjectileSpeed());
 		} else {
 			return null;
 		}
 	}
-	
+
 	public MissileAPI getTargetMissile() {
 		return this.targetMissile;
 	}
-	
+
 	public ShipAPI getTargetShip() {
 		return this.targetShip;
 	}
-	
+
 	public WeaponAPI getWeapon() {
 		return this.weapon;
 	}
-	
+
+	// Fire or not
 	public boolean shouldFire() {
-		if (Global.getCombatEngine().isPaused()) {
-            return false;
-        }
 		if (this.isForceOff) {
 			this.isForceOff = false;
 			return false;
 		}
-		if (this.weapon.isDisabled() || this.weapon.getCooldownRemaining() > 0f) {
+		if (!this.isWeaponAvailable(this.weapon)) {
 			return false;
 		}
-		if ((this.targetMissile != null || this.targetShip != null) && this.weapon == this.engine.getCustomData().get(this.ship.toString() + this.weapon.getId())) {
-			if (this.targetMissile != null && isTargetMissileValid(this.targetMissile)) {
-				if (!tracks.contains(this.targetMissile)) {
-					this.tracks.add(this.targetMissile);
-					//log.info("Targetting " + Misc.getDistance(this.weapon.getLocation(), this.targetMissile.getLocation()) + " by " + this.weapon.getId() + " " + this.getMinLaunchDist());
-				}				
+		if (this.weapon == this.engine.getCustomData().get(prefix + this.shipUid + this.weaponId)) {
+			if (this.targetMissile != null && this.isTargetMissileValid(this.targetMissile, true)) {
+				((List<MissileAPI>) this.engine.getCustomData().get(prefix + this.ship.getOwner() + "missileTrackList"))
+						.add(this.targetMissile);
+				this.missileTrackList.add(this.targetMissile);
+				// this.engine.getCustomData().put(prefix + this.weaponUid + "missile",
+				// this.missileTrackList);
 				return true;
-			} else if (this.targetShip != null && this.fireTimer.intervalElapsed()) {
+			}
+			if (this.targetShip != null && !this.fighterTrackList.contains(this.targetShip)) {
+				this.fighterTrackList.add(this.targetShip);
+				// this.engine.getCustomData().put(prefix + this.weaponUid + "fighter",
+				// this.fighterTrackList);
 				return true;
-			}				
+			}
 		}
 		return false;
 	}
-	
-	public boolean isTargetMissileValid(MissileAPI missile) {
+
+	private void searchTarget() {
+		// Select Missiles
+		for (MissileAPI m : CombatUtils.getMissilesWithinRange(this.ship.getLocation(),
+				this.weapon.getRange() * 1.2f)) {
+			if (this.isTargetMissileValid(m, true) && !this.missileTrackList.contains(m)) {
+				if (this.weapon.hasAIHint(AIHints.GUIDED_POOR) && this.weapon.getSlot().isTurret()) {
+					if (!WeaponUtils.isWithinArc((CombatEntityAPI) m, this.weapon)) {
+						for (WeaponAPI w : (List<WeaponAPI>) this.engine.getCustomData()
+								.get(prefix + this.shipUid + this.weaponId + "list")) {
+							if (this.isWeaponAvailable(w)) {
+								if (WeaponUtils.isWithinArc((CombatEntityAPI) m, w) || !w.getSlot().isTurret()) {
+									this.engine.getCustomData().put(prefix + this.shipUid + this.weaponId, w);
+									return;
+								}
+							}
+						}
+					}
+				} else {
+					this.targetMissile = m;
+					return;
+				}
+			}
+		}
+		// Select Fighter
+		if (this.weapon.hasAIHint(AIHints.ANTI_FTR)) {
+			for (ShipAPI s : CombatUtils.getShipsWithinRange(this.ship.getLocation(), this.weapon.getRange())) {
+				if (isTargetShipValid(s) && !this.fighterTrackList.contains(s)) {
+					this.targetShip = s;
+					return;
+				}
+			}
+		}
+	}
+
+	private void updateTracks() {
+		if (!this.missileTrackList.isEmpty()) {
+			List<MissileAPI> removeList = new ArrayList<MissileAPI>();
+			for (MissileAPI m : this.missileTrackList) {
+				if (!this.isMissileAlive(m)) {
+					if (this.engine.getCustomData().containsKey(prefix + m.toString())) {
+						this.engine.getCustomData().remove(prefix + m.toString());
+					}
+					removeList.add(m);
+				}
+				if (!this.isTargetMissileValid(m, false)) {
+					removeList.add(m);
+				}
+			}
+			this.missileTrackList.removeAll(removeList);
+			// ((List<MissileAPI>) this.engine.getCustomData().get(prefix + this.weaponUid +
+			// "missile"))
+			// .removeAll(removeList);
+			// this.engine.getCustomData().put(prefix + this.weaponUid + "missile",
+			// this.missileTrackList);
+		}
+	}
+
+	private void updateActiveWeapon() {
+		List<WeaponAPI> weapons = (List<WeaponAPI>) this.engine.getCustomData()
+				.get(prefix + this.shipUid + this.weaponId + "list");
+		int index = weapons.indexOf(this.weapon) + 1;
+		while (true) {
+			if (index >= weapons.size()) {
+				index = 0;
+			} else if (this.isWeaponAvailable((WeaponAPI) weapons.get(index))) {
+				this.engine.getCustomData().put(prefix + this.shipUid + this.weaponId, weapons.get(index));
+				break;
+			} else if (index == weapons.indexOf(this.weapon)) {
+				break;
+			} else
+				index++;
+		}
+	}
+
+	private boolean isWeaponAvailable(WeaponAPI weapon) {
+		if (weapon == null)
+			return false;
+		if (weapon.isDisabled() || weapon.isFiring() || weapon.getCooldownRemaining() > 0f) {
+			return false;
+		}
+		if (this.ship == this.engine.getPlayerShip() && !this.engine.getCombatUI().isAutopilotOn()
+				&& this.ship.getWeaponGroupFor(weapon) == this.ship.getSelectedGroupAPI()) {
+			return false;
+		}
+		if (weapon.usesAmmo()) {
+			if (weapon.getAmmo() == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isInterceptMissile(MissileAPI missile) {
+		if (missile.getMissileAI() instanceof GuidedMissileAI) {
+			GuidedMissileAI missileAI = (GuidedMissileAI) missile.getMissileAI();
+			if (missileAI.getTarget() instanceof MissileAPI || missileAI.getTarget() == null) {
+				return true;
+			} else if (missileAI.getTarget() instanceof ShipAPI) {
+				if (((ShipAPI) missileAI.getTarget()).isFighter()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean isMissileAlive(MissileAPI missile) {
+		return !(!this.engine.isEntityInPlay(missile) || missile.isFading() || missile.isFizzling());
+	}
+
+	private boolean isTargetMissileValid(MissileAPI missile, boolean targeting) {
 		if (missile == null) {
 			return false;
 		}
-		if (this.ship.getOwner() == missile.getOwner()) {
+		if (this.ship.getOwner() == missile.getOwner() || missile.isFlare()) {
 			return false;
 		}
 		if (missile.getCollisionClass() == CollisionClass.NONE) {
 			return false;
 		}
-		if (Misc.getDistance(this.weapon.getLocation(), missile.getLocation()) <= this.getMinLaunchDist()) {			
+		if (!this.isMissileAlive(missile) || this.isInterceptMissile(missile)) {
 			return false;
 		}
-		if (!this.isMissileAlive(missile)) {
-			return false;
-		}
-		if (this.isInterceptMissile(missile)) {
-			return false;
-		}		
-		if (this.engine.getCustomData().containsKey(missile.toString())) {
-			for (MissileAPI m : (List<MissileAPI>) this.engine.getCustomData().get(missile.toString())) {
-				if (this.isMissileAlive(m) && m.getSourceAPI() == this.ship) {
+		if (targeting) {
+			// If not targeting this ship and faced > 60 degree away from this ship, skip
+			if (missile.getMissileAI() instanceof GuidedMissileAI) {
+				GuidedMissileAI missileAI = (GuidedMissileAI) missile.getMissileAI();
+				if (missileAI.getTarget() != null && missileAI.getTarget() instanceof ShipAPI) {
+					ShipAPI target = (ShipAPI) missileAI.getTarget();
+					if (target != this.ship) {
+						float angle = Math.abs(Misc.getAngleDiff(missile.getFacing(),
+								Misc.getAngleInDegrees(missile.getLocation(), this.ship.getLocation())));
+						if (angle > 90f) {
+							return false;
+						}
+					}
+					float distA = Misc.getDistance(missile.getLocation(), this.ship.getLocation());
+					float distB = Misc.getDistance(missile.getLocation(), target.getLocation());
+					if (distA > 1250f && distB < 750f) {
+						return false;
+					}
+				}
+			}
+			//
+			if (!missile.isGuided() && !missile.isMine()) {
+				float angle = Math.abs(Misc.getAngleDiff(missile.getFacing(),
+						Misc.getAngleInDegrees(missile.getLocation(), this.ship.getLocation())));
+				if (angle > 90f) {
 					return false;
 				}
-				if (m.getWeaponSpec().getWeaponId() == this.weapon.getId()) {
+			}
+			if (((List<MissileAPI>) this.engine.getCustomData().get(prefix + this.ship.getOwner() + "missileTrackList"))
+					.contains(missile)) {
+				return false;
+			}
+			float distance = Misc.getDistance(this.weapon.getLocation(), missile.getLocation());
+			if (distance > this.weapon.getRange() * 1.2f || distance < this.getMinLaunchDist()) {
+				return false;
+			}
+		}
+		if (this.engine.getCustomData().containsKey(prefix + missile.toString())) {
+			for (MissileAPI m : (List<MissileAPI>) this.engine.getCustomData().get(prefix + missile.toString())) {
+				if (this.isMissileAlive(m)) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
-	
-	public boolean isInterceptMissile(MissileAPI missile) {
-		if (missile.getMissileAI() instanceof GuidedMissileAI) {
-			GuidedMissileAI missileAI = (GuidedMissileAI) missile.getMissileAI();
-			if (missileAI.getTarget() instanceof MissileAPI || missileAI.getTarget()== null) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
+
+	private boolean isTargetShipValid(ShipAPI target) {
+		if (target == null) {
 			return false;
 		}
-	}
-	
-	public boolean isMissileAlive(MissileAPI missile) {
-		if (!this.engine.isEntityInPlay(missile) || missile.isFading() || missile.isFizzling()) {
+		if (!target.isFighter() || target.getOwner() == this.ship.getOwner()) {
 			return false;
 		}
-		else {
-			return true;
+		if (!target.isAlive() || target.getCollisionClass() != CollisionClass.NONE) {
+			return false;
+		}
+		float distance = Misc.getDistance(this.ship.getLocation(), target.getLocation());
+		if (distance > this.weapon.getRange() || distance < this.getMinLaunchDist()) {
+			return false;
+		}
+		return true;
+	}
+
+	private void initSystem() {
+		this.engine = Global.getCombatEngine();
+
+		// Create a custom data for this weapon, the data is to store the tracks this
+		// weapon is engaging, if not created already
+
+		if (!this.engine.getCustomData().containsKey(prefix + this.ship.getOwner() + "missileTrackList")) {
+			List<MissileAPI> missileTrackList = new ArrayList<MissileAPI>();
+			this.engine.getCustomData().put(prefix + this.ship.getOwner() + "missileTrackList", missileTrackList);
+		}
+
+		if (!this.engine.getCustomData().containsKey(prefix + this.shipUid + this.weaponId)) {
+			this.engine.getCustomData().put(prefix + this.shipUid + this.weaponId, this.weapon);
+		}
+		if (!this.engine.getCustomData().containsKey(prefix + this.shipUid + this.weaponId + "list")) {
+			List<WeaponAPI> weapons = new ArrayList<WeaponAPI>();
+			for (WeaponAPI w : this.ship.getAllWeapons()) {
+				if (w.getId().equals(this.weaponId)) {
+					weapons.add(w);
+				}
+			}
+			this.engine.getCustomData().put(prefix + this.shipUid + this.weaponId + "list", weapons);
+		}
+
+		if (!this.engine.getCustomData().containsKey(prefix + this.weaponUid + "missile")) {
+			this.engine.getCustomData().put(prefix + this.weaponUid + "missile", this.missileTrackList);
+		}
+		if (this.weapon.hasAIHint(AIHints.ANTI_FTR)) {
+			if (!this.engine.getCustomData().containsKey(prefix + this.weaponUid + "fighter")) {
+				this.engine.getCustomData().put(prefix + this.weaponUid + "fighter", this.fighterTrackList);
+			}
 		}
 	}
-	
-	public void checkIsAutoFire() {		
-		if (this.weapon.isDisabled()) {
-			return;
+
+	// Get the minimum launch distance for this weapon, used for layered area
+	// defense
+	// E.g. SM3 engage track at at least 1300 distance away, SM6 600, ESSM 150, if
+	// no SM6 onboard, SM3 engage track at 600 distance, ESSM 150, etc
+	private float getMinLaunchDist() {
+		if (this.weaponId.equals("mn_sm3")) {
+			if (!this.engine.getCustomData().containsKey(prefix + this.shipUid + "mn_sm6")) {
+				return 650f;
+			}
+			return 2000f;
 		}
-		if (this.weapon.usesAmmo() ) {
-			if (this.weapon.getAmmo() == 0) {
-				return;
-			}
-		}
-		//if (this.ship != this.engine.getPlayerShip()) {
-		//	return;
-		//}
-		WeaponAPI currentWeapon = (WeaponAPI) this.engine.getCustomData().get(this.ship.toString() + this.weapon.getId());
-		if (this.ship.getWeaponGroupFor(currentWeapon) != this.ship.getSelectedGroupAPI() && !currentWeapon.isDisabled()) {
-			if (currentWeapon.usesAmmo()) {
-				if (this.weapon.getAmmo() > 0) {
-					return;
-				}
-			}
-			return;
-		}		
-		this.engine.getCustomData().put(this.ship.toString() + this.weapon.getId(), this.weapon);
-		return;
-	}
-	
-	public void updateTracks() {		
-		if (!this.tracks.isEmpty()) {
-			List<MissileAPI> newTracks = new ArrayList<MissileAPI>();
-			for (MissileAPI m : this.tracks) {
-				if (this.isMissileAlive(m)) {
-					newTracks.add(m);			
-				} else {
-					//log.info("Track " + m + " is history!");
-				}
-				if (!this.isMissileAlive(m) && this.engine.getCustomData().containsKey(m.toString())) {
-					this.engine.getCustomData().remove(m.toString());						
-				}
-			}
-			this.tracks.clear();
-			this.tracks.addAll(newTracks);
-			for (MissileAPI m : this.tracks) {
-				if (this.engine.getCustomData().containsKey(m.toString())) {					
-					List<MissileAPI> birds = new ArrayList<MissileAPI>();
-					for (MissileAPI b : (List<MissileAPI>) this.engine.getCustomData().get(m.toString())) {
-						if (this.isMissileAlive(b)) {
-							if (b.getMissileAI() instanceof GuidedMissileAI) {
-								GuidedMissileAI missileAI = (GuidedMissileAI) b.getMissileAI();
-								if (m == (MissileAPI) missileAI.getTarget()) {
-									birds.add(b);
-								}
-							}																				
-						}
-					}
-					this.engine.getCustomData().put(m.toString(), birds);
-				}
-			}
-		}
-		return;
-	}
-	
-	public float getMinLaunchDist() {
-		if (this.weapon.getId().equals("mn_sm3")) {
-			if (!this.engine.getCustomData().containsKey(this.ship.toString() + "mn_sm6")) {
-				if (!this.engine.getCustomData().containsKey(this.ship.toString() + "mn_essm")) {
-					return 200f;
-				}
-				return 600f;
-			}
-			return 1300f;
-		}
-		if (this.weapon.getId().equals("mn_sm6")) {
-			if (!this.engine.getCustomData().containsKey(this.ship.toString() + "mn_essm")) {
+		if (this.weaponId.equals("mn_sm6")) {
+			if (!this.engine.getCustomData().containsKey(prefix + this.shipUid + "mn_essm")
+					&& !this.engine.getCustomData().containsKey(prefix + this.shipUid + "mn_essm_small")) {
 				return 150f;
 			}
-			return 600f;
+			return 650f;
 		}
-		if (this.weapon.getId().equals("mn_essm")) {
+		if (this.weaponId.equals("mn_essm") || this.weaponId.equals("mn_essm_small")) {
 			return 150f;
+		}
+		if (this.weaponId.equals("mn_rim7")) {
+			return 100f;
 		}
 		return 0f;
 	}

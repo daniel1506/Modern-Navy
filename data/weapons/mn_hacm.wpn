@@ -1,0 +1,63 @@
+{
+  "id": "mn_hacm",
+  "specClass": "projectile",
+  "projectileSpecId": "mn_hacm",
+  "type": "MISSILE",
+  "size": "SMALL",
+  "displayArcRadius": 2000,
+  "turretSprite": "graphics/weapons/mn_mk141_turret_base.png",
+  "hardpointSprite": "graphics/weapons/mn_mk141_hardpoint_base.png",
+  "turretOffsets": [
+    15.5,
+    3,
+    15.5,
+    -3,
+    11.5,
+    -3,
+    11.5,
+    3
+  ],
+  "turretAngleOffsets": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "hardpointOffsets": [
+    16.5,
+    3,
+    16.5,
+    -3,
+    12.5,
+    3,
+    12.5,
+    -3
+  ],
+  "hardpointAngleOffsets": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "barrelMode": "ALTERNATING",
+  "autocharge": true,
+  "animationType": "SMOKE",
+  "smokeSpec": {
+    "particleSizeMin": 10,
+    "particleSizeRange": 16,
+    "cloudParticleCount": 3,
+    "cloudDuration": 0.9,
+    "cloudRadius": 8,
+    "blowbackParticleCount": 4,
+    "blowbackDuration": 1.1,
+    "blowbackLength": 20,
+    "blowbackSpread": 10,
+    "particleColor": [
+      128,
+      128,
+      128,
+      105
+    ]
+  },
+  "fireSoundTwo": "amsrm_fire"
+}

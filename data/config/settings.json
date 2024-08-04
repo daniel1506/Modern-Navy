@@ -3,5 +3,14 @@
 		"blueprint_packages":{
 			"mn_weapon_package":"graphics/icons/cargo/mn_weapon_package.png",
 		},
+		"mn_vls":{
+			"vls_frame0":"graphics/weapons/vls/VLS_B00.png",
+			"vls_frame1":"graphics/weapons/vls/VLS_B01.png",
+			"vls_frame2":"graphics/weapons/vls/VLS_B02.png",
+			"vls_frame3":"graphics/weapons/vls/VLS_B03.png",
+			"vls_frame4":"graphics/weapons/vls/VLS_B04.png",
+			"vls_frame5":"graphics/weapons/vls/VLS_B05.png",
+			"vls_frame6":"graphics/weapons/vls/VLS_B06.png"
+		}
 	},
 }

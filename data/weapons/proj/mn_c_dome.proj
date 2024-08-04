@@ -1,0 +1,39 @@
+{
+	"id":"mn_c_dome",
+	"specClass":"missile",	
+	"missileType":"MISSILE",
+	"sprite":"graphics/missiles/mn_rim7.png",
+	"onFireEffect":"data.scripts.combat.MNCDomeMissileOnFireEffect",
+	"size":[5,24],	
+	"center":[2.5,12],
+	"collisionRadius":25,
+	"collisionClass":"MISSILE_NO_FF",
+	"explosionColor":[255,165,50,255],
+	"explosionRadius":5,
+	"maxFlightTime":1.8,
+	#"flameoutTime":1.5,
+	"engineSpec":{
+                "turnAcc":980,
+                "turnRate":490,
+                "acc":3547,
+                "dec":0},
+	"engineSlots":[{"id":"ES1",
+					"loc":[-11, 0],
+				    "style":"CUSTOM",
+					"styleSpec":{
+						"mode":"QUAD_STRIP", # PARTICLES or QUAD_STRIP, determines which params are used
+						"engineColor":[255,125,25,255],
+						"contrailDuration":.2,
+						"contrailWidthMult":1.5,
+						"contrailWidthAddedFractionAtEnd":2,  # can be negative. makes trail spread out/narrow at the end
+						"contrailMinSeg":5, # min segment length, in pixels
+						"contrailMaxSpeedMult":.0f,
+						"contrailAngularVelocityMult":0.5f,
+						"contrailSpawnDistMult":0f, # how far away from engine it starts
+						"contrailColor":[75,75,75,150],
+						"type":"SMOKE" # GLOW or SMOKE; additive or regular blend mode
+					},
+				    "width":5.0,
+				    "length":10.0,
+				    "angle":180.0}]
+}

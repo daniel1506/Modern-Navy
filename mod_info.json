@@ -1,7 +1,7 @@
 {
 	"id":"mn", # required code id
 	"name":"Modern Navy Mod", # required friendly name
-	"version":"0.2.0", # required mod version
+	"version":"0.3.0", # required mod version
 	"description":"Modern Navy Mod", # required friendly mod description
 	"gameVersion":"0.97a-RC11", # required starsector version this was designed for
 	"author":"BeyondTheHorizon", # author's name

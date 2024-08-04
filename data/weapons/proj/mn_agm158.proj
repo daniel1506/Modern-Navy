@@ -3,6 +3,7 @@
 	"specClass":"missile",	
 	"missileType":"MISSILE",
 	"sprite":"graphics/missiles/mn_agm158.png",
+	"onFireEffect":"data.scripts.combat.MNStealthMissileOnFireEffect",
 	"size":[7,22],	
 	"center":[3.5,11],
 	"collisionRadius":26,

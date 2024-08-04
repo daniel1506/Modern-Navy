@@ -1,6 +1,9 @@
 {
 	"mn_sound_phalanx":[
 		{"file":"sounds/sfx_wpn_guns/mn_phalanx_fire.ogg","pitch":1.0,"volume":0.1},
+	],
+	"mn_sound_vls":[
+		{"file":"sounds/sfx_wpn_guns/mn_vls_fire.ogg","pitch":1.0,"volume":1.0},
 	],	     
 }
 
