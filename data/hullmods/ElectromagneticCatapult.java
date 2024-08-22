@@ -25,7 +25,7 @@ public class ElectromagneticCatapult extends BaseHullMod {
 		
 		for (FighterWingAPI w : ship.getAllWings()) {
 			for (ShipAPI s : w.getWingMembers()) {
-				if (s.isLiftingOff()) {
+				if (s.isLiftingOff() && s.getTravelDrive() != null) {
 					if (!s.getTravelDrive().isOn()) {
 						s.turnOnTravelDrive(1.5f);
 					}
