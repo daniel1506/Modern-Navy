@@ -1,0 +1,44 @@
+{
+  "variantId": "mn_fa18e_intercept",
+  "hullId": "mn_fa18e",
+  "displayName": "Super Hornet (Intercept)",
+  "goalVariant": true,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS0001": "mn_aim174b",
+        "WS0002": "mn_aim174b",
+        "WS0003": "mn_aim174b",
+        "WS0004": "mn_aim174b",
+        "WS0005": "mn_aim174b",
+        "WS0006": "mn_aim174b",
+        "WS0007": "mn_aim174b",
+        "WS0008": "mn_aim174b"
+      }
+    },
+    {
+      "autofire": false,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS0009": "mn_aim9",
+        "WS0010": "mn_aim9"
+      }
+    },
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS0011": "mn_gau4"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": []
+}

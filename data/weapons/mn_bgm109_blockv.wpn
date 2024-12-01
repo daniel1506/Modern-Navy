@@ -1,7 +1,7 @@
 {
   "id": "mn_bgm109_blockv",
   "specClass": "projectile",
-  "projectileSpecId": "mn_bgm109",
+  "projectileSpecId": "mn_bgm109_blk_v",
   "type": "MISSILE",
   "size": "MEDIUM",
   "everyFrameEffect": "data.scripts.combat.MNVLSOnFireEffect",

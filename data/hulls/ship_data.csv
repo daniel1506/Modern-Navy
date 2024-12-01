@@ -1,10 +1,10 @@
 name,id,designation,tech/manufacturer,system id,fleet pts,hitpoints,armor rating,max flux,8/6/5/4%,flux dissipation,ordnance points,fighter bays,max speed,acceleration,deceleration,max turn rate,turn acceleration,mass,shield type,defense id,shield arc,shield upkeep,shield efficiency,phase cost,phase upkeep,min crew,max crew,cargo,fuel,fuel/ly,range,max burn,base value,cr %/day,CR to deploy,peak CR sec,CR loss/sec,supplies/rec,supplies/mo,c/s,c/f,f/s,f/f,crew/s,crew/f,hints,tags,rarity,breakProb,minPieces,maxPieces,travel drive,number
-#Arleigh Burke,mn_arleigh_burke,Destroyer,Ingalls Shipbuilding,,30,17500,1250,10000,,1000,150,,70,35,20,30,10,1000,NONE,,,,,,,350,450,300,300,2,150,10,500000,10,10,720,0.25,25,25,,,,,,,,,,0.6,2,4,,
+Arleigh Burke,mn_arleigh_burke,Destroyer,Ingalls Shipbuilding,mn_damagecontrolman,30,17500,1250,10000,,1000,150,,70,35,20,30,10,1000,NONE,,,,,,,350,450,300,300,2,150,10,500000,10,10,720,0.25,25,25,,,,,,,,,,0.6,2,4,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 #Gerald R. Ford,mn_gerald_r_ford,Carrier,Newport News Shipbuilding,,45,40000,1500,50000,,1500,150,8,16.5,8,4,15,3,5000,NONE,,,,,,,3000,5200,1000,1000,0,150,9,1280000,10,15,750,0.25,45,100,,,,,,,,,,0.6,2,4,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-#F/A-18,mn_fa18,,"Boeing Defense, Space & Security",,,300,50,500,,100,0,,544.5,272,136,73.5,73.5,40,NONE,,0,0,0,,,2,2,,,,,,,,,,,,,,,,,,,,,,0,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+F/A-18E,mn_fa18e,,"Boeing Defense, Space & Security",,,500,25,500,,100,0,,272,136,68,73.5,68.6,40,NONE,,0,0,0,,,1,1,,,,,,,,,,,,,,,,,,,,,,0,,,,
+F/A-18F,mn_fa18f,,"Boeing Defense, Space & Security",,,500,25,500,,100,0,,272,136,68,73.5,68.6,40,NONE,,0,0,0,,,2,2,,,,,,,,,,,,,,,,,,,,,,0,,,,
+E/A-18G,mn_ea18g,,"Boeing Defense, Space & Security",mn_offensiveecm,,500,25,500,,100,0,,272,136,68,73.5,68.6,40,NONE,,0,0,0,,,2,2,,,,,,,,,,,,,,,,,,,,,,0,,,,
 #Warthog,warthog,,Midline,flarelauncher_fighter,,750,200,200,,50,0,,130,180,150,100,200,40,NONE,,0,0,0,,,2,2,,,,,,,,,,,,,,,,,,,,,,0,,,,110

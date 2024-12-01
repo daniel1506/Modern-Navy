@@ -1,0 +1,20 @@
+{
+	"id":"mn_offensiveecm",
+	"type":"STAT_MOD",
+	"aiType":"CUSTOM",
+	"aiScript":"data.shipsystems.scripts.ai.OffensiveECMAI",
+	
+	"statsScript":"data.shipsystems.scripts.OffensiveECMStats",
+
+	"fadeActivationSoundOnChargedown":true,
+	"useSound":"system_damper",
+	#"loopSound":"system_damper_loop",
+	"deactivateSound":"system_damper_off",
+	"outOfUsesSound":"gun_out_of_ammo",
+	
+	"aiHints":{
+	}
+}
+
+
+

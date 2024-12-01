@@ -4,23 +4,39 @@
   "projectileSpecId": "mn_rim7",
   "type": "MISSILE",
   "size": "SMALL",
-  "everyFrameEffect": "data.scripts.combat.MNVLSOnFireEffect",
   "displayArcRadius": 500,
-  "turretSprite": "graphics/weapons/mn_mk41_turret_base_small.png",
-  "turretUnderSprite": "graphics/weapons/mn_mk41_turret_under_small.png",
-  "hardpointSprite": "graphics/weapons/mn_mk41_hardpoint_base_small.png",
+  "turretSprite": "graphics/weapons/mn_mk29_turret_base.png",
+  "hardpointSprite": "graphics/weapons/mn_mk29_hardpoint_base.png",
   "turretOffsets": [
+    8.5,
+    -5.5,
+    8.5,
+    5.5,
+    8.5,
+    -3.5,
+    8.5,
+    3.5
+  ],
+  "turretAngleOffsets": [
+    0,
+    0,
     0,
     0
   ],
-  "turretAngleOffsets": [
-    0
-  ],
   "hardpointOffsets": [
-    0.5,
-    0
+    12.5,
+    -5.5,
+    12.5,
+    5.5,
+    12.5,
+    -3.5,
+    12.5,
+    3.5
   ],
   "hardpointAngleOffsets": [
+    0,
+    0,
+    0,
     0
   ],
   "barrelMode": "ALTERNATING",

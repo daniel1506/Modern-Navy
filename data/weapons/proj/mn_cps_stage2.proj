@@ -15,7 +15,7 @@
 	#"glowColor":[125,125,100,255],
 	#"glowRadius":25,
 	"engineSpec":{
-				  "turnAcc":100,
+				  "turnAcc":2500,
 				  "turnRate":70,
 				  "acc":600,
 				  "dec":400,

@@ -131,7 +131,7 @@ public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
 		}
 		if (Math.abs(aimAngle) < 45.0f) {
 			if (this.missile.getDamageType() == DamageType.KINETIC) {
-				if (this.missile.getMoveSpeed() < 2041f
+				if (this.missile.getVelocity().length() < 2041f
 						|| Misc.getDistance(this.missile.getLocation(), this.target.getLocation()) <= 750f) {
 					this.missile.giveCommand(ShipCommand.ACCELERATE);
 				}
@@ -195,7 +195,7 @@ public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
 		for (MissileAPI m : CombatUtils.getMissilesWithinRange(this.missile.getLocation(), range)) {
 			if (this.isTargetMissileValid(m)) {
 				if (Misc.getAngleDiff(this.missile.getFacing(),
-						Misc.getAngleInDegrees(this.missile.getLocation(), m.getLocation())) <= 60f) {
+						Misc.getAngleInDegrees(this.missile.getLocation(), m.getLocation())) <= 90f) {
 					if (this.engine.getCustomData().containsKey(prefix + m.toString())) {
 						((List<MissileAPI>) this.engine.getCustomData().get(prefix + m.toString())).add(this.missile);
 					} else {

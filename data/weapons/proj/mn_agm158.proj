@@ -4,13 +4,15 @@
 	"missileType":"MISSILE",
 	"sprite":"graphics/missiles/mn_agm158.png",
 	"onFireEffect":"data.scripts.combat.MNStealthMissileOnFireEffect",
-	"size":[7,22],	
-	"center":[3.5,11],
-	"collisionRadius":26,
+	#"size":[7,22],
+	"size":[10,14],	
+	#"center":[3.5,11],
+	"center":[5,7],
+	"collisionRadius":7,
 	"collisionClass":"NONE",
 	"explosionColor":[255,165,50,255],
 	"explosionRadius":40,
-	"maxFlightTime":6.2,
+	#"maxFlightTime":6.2,
 	#"flameoutTime":1.5,
 	"engineSpec":{
                 "turnAcc":196,
@@ -19,7 +21,8 @@
                 "dec":0},		  
 	"engineSlots":[
                 {"id":"ES1",
-                "loc":[-10, 0],
+                #"loc":[-10, 0],
+				"loc":[-5, 0],
                 "style":"CUSTOM",
 		"styleSpec":{
 				"mode":"QUAD_STRIP", # PARTICLES or QUAD_STRIP, determines which params are used

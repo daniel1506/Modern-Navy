@@ -1,0 +1,27 @@
+{
+  "variantId": "mn_ea18g_sead",
+  "hullId": "mn_ea18g",
+  "displayName": "Growler (SEAD)",
+  "goalVariant": true,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS0004": "mn_agm88g",
+        "WS0005": "mn_agm88g",
+        "WS0006": "mn_agm88g",
+        "WS0007": "mn_agm88g",
+        "WS0008": "mn_agm88g",
+        "WS0009": "mn_agm88g"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": []
+}

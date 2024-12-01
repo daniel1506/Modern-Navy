@@ -1,0 +1,143 @@
+{
+  "hullName": "F/A-18F Super Hornet",
+  "hullId": "mn_fa18f",
+  "hullSize": "FIGHTER",
+  "spriteName": "graphics/ships/fighters/mn_fa18.png",
+  "style": "LOW_TECH",
+  "height": 74,
+  "width": 74,
+  "center": [37, 36],
+  "collisionRadius": 27,
+  "shieldCenter": [0, -0],
+  "shieldRadius": 27.5,
+  "viewOffset": 0,
+  "weaponSlots": [
+    {
+      "id": "WS0001",
+      "size": "SMALL",
+      "type": "BALLISTIC",
+      "mount": "HIDDEN",
+      "arc": 5,
+      "angle": 0,
+      "locations": [20.5, -0]
+    },
+    {
+      "id": "WS0002",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 180,
+      "angle": 0,
+      "locations": [-6, 17]
+    },
+    {
+      "id": "WS0003",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 180,
+      "angle": -0,
+      "locations": [-6, -17]
+    },
+    {
+      "id": "WS0004",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 90,
+      "angle": 0,
+      "locations": [-5, 10.5]
+    },
+    {
+      "id": "WS0005",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 90,
+      "angle": -0,
+      "locations": [-5, -10.5]
+    },
+    {
+      "id": "WS0006",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 90,
+      "angle": 0,
+      "locations": [-5, 8.5]
+    },
+    {
+      "id": "WS0007",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 90,
+      "angle": -0,
+      "locations": [-5, -8.5]
+    },
+    {
+      "id": "WS0008",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 90,
+      "angle": 0,
+      "locations": [-4.5, 6.5]
+    },
+    {
+      "id": "WS0009",
+      "size": "SMALL",
+      "type": "MISSILE",
+      "mount": "HIDDEN",
+      "arc": 90,
+      "angle": -0,
+      "locations": [-4.5, -6.5]
+    }
+  ],
+  "engineSlots": [
+    {
+      "location": [-23, 2],
+      "length": 5,
+      "width": 3,
+      "angle": 180,
+      "contrailSize": 10,
+      "style": "LOW_TECH"
+    },
+    {
+      "location": [-23, -2],
+      "length": 5,
+      "width": 3,
+      "angle": -180,
+      "contrailSize": 10,
+      "style": "LOW_TECH"
+    }
+  ],
+  "bounds": [
+    26.5, -0.5,
+    25.5, -1.5,
+    22.5, -2.5,
+    14.5, -3.5,
+    1.5, -5.5,
+    -3.5, -14.5,
+    -3.5, -17.5,
+    -12.5, -17.5,
+    -11.5, -5.5,
+    -16.5, -5.5,
+    -21.5, -11.5,
+    -23.5, -11.5,
+    -24.5, -10.5,
+    -24.5, 10.5,
+    -23.5, 11.5,
+    -21.5, 11.5,
+    -16.5, 5.5,
+    -11.5, 5.5,
+    -12.5, 17.5,
+    -3.5, 17.5,
+    -3.5, 14.5,
+    1.5, 5.5,
+    14.5, 3.5,
+    22.5, 2.5,
+    25.5, 1.5,
+    26.5, 0.5
+  ]
+}

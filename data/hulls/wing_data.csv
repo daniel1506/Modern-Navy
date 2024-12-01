@@ -1,0 +1,5 @@
+id,variant,tags,tier,rarity,fleet pts,op cost,formation,range,attackRunRange,attackPositionOffset,num,role,role desc,refit,base value,,,,,,,,,,,,,number
+mn_fa18e_cap_wing,mn_fa18e_cap,"support5, support, low, mn_bp",2,,5,10,V,2000,750,0,2,SUPPORT,Combat Air Patrol,10,5000,,,,,,,,,,,,,
+mn_fa18e_intercept_wing,mn_fa18e_intercept,"interceptor5, interceptor, low, mn_bp",2,,5,10,V,2000,750,0,2,INTERCEPTOR,Combat Air Patrol,10,7500,,,,,,,,,,,,,
+mn_fa18f_asuw_agm158_wing,mn_fa18f_asuw_agm158,"fighter5, fighter, low, mn_bp",2,,5,10,V,4000,1500,0,2,FIGHTER,"ASuW Ground, Stand-off Stealth",10,5000,,,,,,,,,,,,,
+mn_ea18g_sead_wing,mn_ea18g_sead,"fighter5, fighter, low, mn_bp",2,,5,15,V,4000,1500,0,2,FIGHTER,SEAD,10,5000,,,,,,,,,,,,,

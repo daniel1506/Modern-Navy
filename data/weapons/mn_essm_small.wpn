@@ -4,16 +4,23 @@
   "projectileSpecId": "mn_essm",
   "type": "MISSILE",
   "size": "SMALL",
-  "everyFrameEffect": "data.scripts.combat.MNVLSOnFireEffect",
   "displayArcRadius": 500,
-  "turretSprite": "graphics/weapons/mn_mk41_turret_base_small.png",
-  "turretUnderSprite": "graphics/weapons/mn_mk41_turret_under_small.png",
+  "turretSprite": "graphics/weapons/mn_mk29_turret_base.png",
   "hardpointSprite": "graphics/weapons/mn_mk41_hardpoint_base_small.png",
   "turretOffsets": [
-    0,
-    0
+    8.5,
+    -5.5,
+    8.5,
+    5.5,
+    8.5,
+    -3.5,
+    8.5,
+    3.5
   ],
   "turretAngleOffsets": [
+    0,
+    0,
+    0,
     0
   ],
   "hardpointOffsets": [

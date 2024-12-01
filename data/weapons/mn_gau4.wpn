@@ -1,0 +1,71 @@
+{
+  "id": "mn_gau4",
+  "specClass": "projectile",
+  "projectileSpecId": "mn_ciws_shot",
+  "type": "BALLISTIC",
+  "size": "SMALL",
+  "displayArcRadius": 250,
+  "turretSprite": "graphics/weapons/mn_gau_turret_base.png",
+  "hardpointSprite": "graphics/weapons/mn_gau_turret_base.png",
+  "turretOffsets": [
+    3,
+    0,
+    3,
+    -0,
+    3,
+    0,
+    3,
+    -0,
+    3,
+    0,
+    3,
+    -0
+  ],
+  "turretAngleOffsets": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "hardpointOffsets": [
+    5,
+    0,
+    5,
+    -0,
+    5,
+    0,
+    5,
+    -0,
+    5,
+    0,
+    5,
+    -0
+  ],
+  "hardpointAngleOffsets": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "barrelMode": "DUAL",
+  "animationType": "MUZZLE_FLASH",
+  "muzzleFlashSpec": {
+    "length": 4,
+    "spread": 4,
+    "particleSizeMin": 6,
+    "particleSizeRange": 8,
+    "particleDuration": 0.15,
+    "particleCount": 5,
+    "particleColor": [
+      255,
+      255,
+      155,
+      200
+    ]
+  },
+  "fireSoundTwo": "mn_sound_phalanx"
+}

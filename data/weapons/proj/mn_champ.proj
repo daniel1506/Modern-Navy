@@ -1,0 +1,47 @@
+{
+	"id":"mn_champ",
+	"specClass":"missile",	
+	"missileType":"MISSILE",
+	"sprite":"graphics/missiles/mn_bgm109.png",
+	"onHitEffect":"data.scripts.combat.MNCHAMPOnHitEffect",
+	"size":[16,35],	
+	"center":[8,17.5],
+	"collisionRadius":20,
+	"collisionClass":"MISSILE_NO_FF",
+	"explosionColor":[255,165,50,255],
+	"explosionRadius":30,
+	#"maxFlightTime":8,
+	#"flameoutTime":1.5,
+	"engineSpec":{
+                "turnAcc":1440,
+                "turnRate":98,
+                "acc":480,
+                "dec":0},		  
+	"engineSlots":[
+                {"id":"ES1",
+                "loc":[-10, 0],
+                "style":"CUSTOM",
+		"styleSpec":{
+				"mode":"QUAD_STRIP", # PARTICLES or QUAD_STRIP, determines which params are used
+				"engineColor":[150,100,255,0],
+				#"glowSizeMult":1.5,
+				"glowSizeMult":0.0,
+				#"glowAlternateColor":[150,100,255,255],
+				"glowAlternateColor":[150,100,255,0],
+				#"contrailDuration":2,
+				"contrailDuration":0,
+				"contrailWidthMult":0,
+				"contrailWidthAddedFractionAtEnd":2,  # can be negative. makes trail spread out/narrow at the end
+				"contrailMinSeg":0, # min segment length, in pixels
+				"contrailMaxSpeedMult":.0f,
+				"contrailAngularVelocityMult":0.0f,
+				"contrailSpawnDistMult":.5, # how far away from engine it starts
+				#"contrailColor":[70,100,155,75],
+				"contrailColor":[70,100,155,0],
+				"type":"GLOW" # GLOW or SMOKE; additive or regular blend mode
+			},
+		"width":4.0,
+		"length":15.0,
+		"angle":180.0
+                }]
+}

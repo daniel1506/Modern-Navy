@@ -49,7 +49,7 @@
 					"damage":500,
 					"emp":0, # needs to match highlight in weapon_data.csv
 					"damageType":HIGH_EXPLOSIVE,
-					"hitpoints":100,
+					"hitpoints":300,
 					#"evenSpread":true,
 					"arc":0,
 					"spreadInaccuracy":0,

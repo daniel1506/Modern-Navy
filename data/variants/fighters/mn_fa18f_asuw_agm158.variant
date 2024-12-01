@@ -1,0 +1,35 @@
+{
+  "variantId": "mn_fa18f_asuw_agm158",
+  "hullId": "mn_fa18f",
+  "displayName": "Super Hornet (ASuW Ground, Stealth)",
+  "goalVariant": true,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS0002": "mn_aim9",
+        "WS0003": "mn_aim9"
+      }
+    },
+    {
+      "autofire": false,
+      "mode": "ALTERNATING",
+      "weapons": {
+        "WS0004": "mn_agm158",
+        "WS0005": "mn_agm158",
+        "WS0006": "mn_agm158",
+        "WS0007": "mn_agm158",
+        "WS0008": "mn_agm158",
+        "WS0009": "mn_agm158"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": []
+}

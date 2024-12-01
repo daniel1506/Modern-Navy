@@ -1,0 +1,3 @@
+name,id,flux/second,f/s (base rate),f/s (base cap),flux/use,f/u (base rate),f/u (base cap),cr/u,max uses,regen,charge up,active,down,cooldown,toggle,noDissipation,noHardDissipation,hardFlux,noFiring,noTurning,noStrafing,noAccel,noShield,noVent,isPhaseCloak,tags,icon
+Damage Controlman,mn_damagecontrolman,500,,,,,,,3,0.00833,5,20,0,30,FALSE,,,,,,,,,,,,graphics/icons/hullsys/entropy_amplifier.png
+Offensive ECM,mn_offensiveecm,,,,,,,,,,5,,0,10,TRUE,,,,,,,,,,,,graphics/icons/hullsys/drone_sensor.png

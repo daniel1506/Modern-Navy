@@ -323,7 +323,7 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 		if (!target.isFighter() || target.getOwner() == this.ship.getOwner()) {
 			return false;
 		}
-		if (!target.isAlive() || target.getCollisionClass() != CollisionClass.NONE) {
+		if (!target.isAlive() || target.getCollisionClass() == CollisionClass.NONE) {
 			return false;
 		}
 		float distance = Misc.getDistance(this.ship.getLocation(), target.getLocation());
