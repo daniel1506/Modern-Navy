@@ -20,14 +20,17 @@ import com.fs.starfarer.api.util.Misc;
 
 import org.lazywizard.lazylib.combat.CombatUtils;
 import org.lazywizard.lazylib.combat.WeaponUtils;
+import org.magiclib.util.MagicTargeting;
 
-//import org.apache.log4j.Logger;
+import data.scripts.combat.MNAESAListener;
+
+import org.apache.log4j.Logger;
 
 public class AAMWeaponAI implements AutofireAIPlugin {
 
-	// public Logger log = Logger.getLogger(this.getClass());
+	public Logger log = Logger.getLogger(this.getClass());
 
-	public static final String prefix = "acs";
+	public static final String prefix = "AESA";
 
 	private CombatEngineAPI engine;
 	private WeaponAPI weapon;
@@ -50,17 +53,24 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 
 		this.ship = ship;
 		this.shipUid = ship.toString();
+
+		if (!ship.hasListenerOfClass(MNAESAListener.class)) {
+			MNAESAListener aesa = new MNAESAListener(ship);
+			ship.addListener(aesa);
+		}
 	}
 
 	public void advance(float amount) {
 		if (this.engine != Global.getCombatEngine()) {
-			this.initSystem();
+			this.engine = Global.getCombatEngine();
+			// this.initSystem();
 			return;
 		}
-
 		if (this.engine.isPaused() || this.weapon == null) {
 			return;
 		}
+		this.initSystem();
+
 		// Update tracks of this weapon, check the function for more detail
 		this.updateTracks();
 
@@ -75,6 +85,7 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 				this.targetShip = null;
 			}
 		}
+
 		if (this.engine.getCustomData().containsKey(prefix + this.shipUid + this.weaponId)) {
 			if (!this.ship.getAllWeapons()
 					.contains((WeaponAPI) this.engine.getCustomData().get(prefix + this.shipUid + this.weaponId))) {
@@ -159,15 +170,27 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 	private void searchTarget() {
 		// Select Fighter
 		// if (this.weapon.hasAIHint(AIHints.ANTI_FTR)) {
-		for (ShipAPI s : CombatUtils.getShipsWithinRange(this.weapon.getLocation(), this.weapon.getRange() * 0.9f)) {
-			if (WeaponUtils.isWithinArc((CombatEntityAPI) s, this.weapon)) {
-				if (isTargetShipValid(s, true) && !this.fighterTrackList.contains(s)) {
-					this.targetShip = s;
-					return;
-				}
+		// for (ShipAPI s : CombatUtils.getShipsWithinRange(this.weapon.getLocation(),
+		// this.weapon.getRange() * 0.9f)) {
+		// if (WeaponUtils.isWithinArc((CombatEntityAPI) s, this.weapon)) {
+		// if (isTargetShipValid(s, true) && !this.fighterTrackList.contains(s)) {
+		// this.targetShip = s;
+		// return;
+		// }
+		// }
+		// }
+		// }
+		if (this.weapon.hasAIHint(AIHints.ANTI_FTR)) {
+			ShipAPI tempTargetShip = MagicTargeting.pickShipTarget(this.ship,
+					MagicTargeting.targetSeeking.IGNORE_SOURCE,
+					Integer.valueOf((int) (this.weapon.getRange() * 0.8f)), Integer.valueOf((int) this.weapon.getArc()),
+					1, 0, 0, 0, 0);
+			if (isTargetShipValid(tempTargetShip, true) && !this.fighterTrackList.contains(tempTargetShip)) {
+				this.targetShip = tempTargetShip;
+				log.info("ValidTarget: " + tempTargetShip.getId());
+				return;
 			}
 		}
-		// }
 		// Select Missiles
 		if (!this.weapon.getId().equals("mn_aim174b")) {
 			return;
@@ -240,6 +263,7 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 			} else
 				index++;
 		}
+		this.engine.getCustomData().put(prefix + this.shipUid + this.weaponId, weapons.get(index));
 	}
 
 	private void refreshWeaponList() {
@@ -349,15 +373,16 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 			// return false;
 			// }
 			// Get estimate number of missile to take out the target
-			int maxMissiles = (int) Math.floor(target.getHitpoints() / this.weapon.getDamage().getDamage());
-			if (target.getShield() != null) {
-				maxMissiles++;
-			}
+			// int maxMissiles = (int) Math.ceil(target.getHitpoints() /
+			// this.weapon.getDamage().getDamage());
+			// if (target.getShield() != null) {
+			// maxMissiles++;
+			// }
 			int frequency = Collections.frequency(
 					(List<ShipAPI>) this.engine.getCustomData()
 							.get(prefix + this.ship.getOwner() + "fighterTrackList"),
 					target);
-			if (frequency >= maxMissiles) {
+			if (frequency >= 2) {
 				return false;
 			}
 			// if (((List<ShipAPI>) this.engine.getCustomData().get(prefix +
@@ -369,44 +394,53 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 			// }
 		}
 		if (this.engine.getCustomData().containsKey(prefix + target.toString())) {
-			float damageAmount = 0f;
-			for (MissileAPI m : (List<MissileAPI>) this.engine.getCustomData().get(prefix
-					+ target.toString())) {
-				if (this.isMissileAlive(m)) {
-					damageAmount = damageAmount + m.getDamageAmount();
-				}
-			}
-			float targetHP = target.getShield() != null ? target.getHitpoints() +
-					target.getMaxFlux()
-					: target.getHitpoints();
-			if (damageAmount > targetHP) {
+			this.updateTargetStatus(target);
+			if (((List<MissileAPI>) this.engine.getCustomData().get(prefix + target.toString())).size() > 2) {
 				return false;
 			}
+			// float damageAmount = 0f;
+			// for (MissileAPI m : (List<MissileAPI>) this.engine.getCustomData().get(prefix
+			// + target.toString())) {
+			// if (this.isMissileAlive(m)) {
+			// damageAmount = damageAmount + m.getDamageAmount();
+			// }
+			// }
+			// float targetHP = target.getShield() != null ? target.getHitpoints() +
+			// target.getMaxFlux()
+			// : target.getHitpoints();
+			// if (damageAmount > targetHP) {
+			// return false;
+			// }
 		}
 		return true;
 	}
 
-	private void initSystem() {
-		this.engine = Global.getCombatEngine();
-
-		// Create aegis controller
-		if (!this.ship.hasListenerOfClass(AegisCombatSystemController.class)) {
-			AegisCombatSystemController aegis = new AegisCombatSystemController(this.ship);
-			this.ship.addListener(aegis);
+	private void updateTargetStatus(ShipAPI target) {
+		if (this.engine.getCustomData().containsKey(prefix + target.toString())) {
+			List<MissileAPI> removeList = new ArrayList<MissileAPI>();
+			for (MissileAPI m : (List<MissileAPI>) this.engine.getCustomData().get(prefix + target.toString())) {
+				if (!this.isMissileAlive(m)) {
+					removeList.add(m);
+				}
+			}
+			((List<MissileAPI>) this.engine.getCustomData().get(prefix + target.toString())).removeAll(removeList);
 		}
+	}
+
+	private void initSystem() {
 
 		// Create a custom data for this weapon, the data is to store the tracks this
 		// weapon is engaging, if not created already
 		// Class<AegisCombatSystemController> c = AegisCombatSystemController.class;
-
 		if (!this.engine.getCustomData().containsKey(prefix + this.ship.getOwner() + "fighterTrackList")) {
-			List<ShipAPI> fighterTrackList = new ArrayList<ShipAPI>();
-			this.engine.getCustomData().put(prefix + this.ship.getOwner() + "fighterTrackList", fighterTrackList);
+			List<ShipAPI> AESAfighterTrackList = new ArrayList<ShipAPI>();
+			this.engine.getCustomData().put(prefix + this.ship.getOwner() + "fighterTrackList", AESAfighterTrackList);
 		}
 
 		if (!this.engine.getCustomData().containsKey(prefix + this.shipUid + this.weaponId)) {
 			this.engine.getCustomData().put(prefix + this.shipUid + this.weaponId, this.weapon);
 		}
+
 		if (!this.engine.getCustomData().containsKey(prefix + this.shipUid + this.weaponId + "list")) {
 			List<WeaponAPI> weapons = new ArrayList<WeaponAPI>();
 			for (WeaponAPI w : this.ship.getAllWeapons()) {
@@ -417,6 +451,10 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 			this.engine.getCustomData().put(prefix + this.shipUid + this.weaponId + "list", weapons);
 		}
 
+		if (!this.engine.getCustomData().containsKey(prefix + this.weaponUid + "fighter")) {
+			this.engine.getCustomData().put(prefix + this.weaponUid + "fighter", this.fighterTrackList);
+		}
+
 		if (this.weapon.getId().equals("mn_aim174b")) {
 			if (!this.engine.getCustomData().containsKey(prefix + this.ship.getOwner() + "missileTrackList")) {
 				List<MissileAPI> missileTrackList = new ArrayList<MissileAPI>();
@@ -425,9 +463,6 @@ public class AAMWeaponAI implements AutofireAIPlugin {
 			if (!this.engine.getCustomData().containsKey(prefix + this.weaponUid + "missile")) {
 				this.engine.getCustomData().put(prefix + this.weaponUid + "missile", this.missileTrackList);
 			}
-		}
-		if (!this.engine.getCustomData().containsKey(prefix + this.weaponUid + "fighter")) {
-			this.engine.getCustomData().put(prefix + this.weaponUid + "fighter", this.fighterTrackList);
 		}
 	}
 

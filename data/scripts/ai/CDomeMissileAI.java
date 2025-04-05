@@ -43,7 +43,7 @@ public class CDomeMissileAI implements MissileAIPlugin, GuidedMissileAI {
 	private final Color PARTICLE_COLOR;
 	private final int NUM_PARTICLES = 20;
 
-	private static final String prefix = "CBS";
+	private static final String prefix = "ASS";
 
 	public CDomeMissileAI(MissileAPI missile, ShipAPI launchingShip) {
 		this.lead = new Vector2f();

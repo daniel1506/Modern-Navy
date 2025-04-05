@@ -34,7 +34,7 @@ public class AAMMissileAI implements MissileAIPlugin, GuidedMissileAI {
 
 	// public Logger log = Logger.getLogger(this.getClass());
 
-	public static final String prefix = "acs";
+	public static final String prefix = "AESA";
 	public static final Color EXPLOSION_COLOR = new Color(255, 0, 0, 255);
 	public static final Color PARTICLE_COLOR = new Color(240, 200, 50, 255);
 
@@ -43,7 +43,7 @@ public class AAMMissileAI implements MissileAIPlugin, GuidedMissileAI {
 	private CombatEngineAPI engine;
 	private MissileAPI missile;
 	private ShipAPI ship;
-	private String shipUid;
+	// private String shipUid;
 	private String weaponUid;
 	private CombatEntityAPI target;
 
@@ -55,7 +55,7 @@ public class AAMMissileAI implements MissileAIPlugin, GuidedMissileAI {
 		this.missile = missile;
 		this.weaponUid = missile.getWeapon().toString();
 		this.ship = missile.getSource();
-		this.shipUid = missile.getSource().toString();
+		// this.shipUid = missile.getSource().toString();
 	}
 
 	public void advance(float amount) {
@@ -101,6 +101,10 @@ public class AAMMissileAI implements MissileAIPlugin, GuidedMissileAI {
 			// this.missile.setFacing(Misc.getAngleInDegrees(this.missile.getLocation(),
 			// this.target.getLocation()));
 			// }
+		}
+
+		if (this.target == null) {
+			return;
 		}
 
 		// Guidence and movement code from Tartiflette's Diable Avionics mod
@@ -197,8 +201,9 @@ public class AAMMissileAI implements MissileAIPlugin, GuidedMissileAI {
 	}
 
 	private void aquireNewTarget() {
-		float range = this.missile.getMaxSpeed() * 0.9f
-				* (this.missile.getMaxFlightTime() - this.missile.getFlightTime());
+		// float range = this.missile.getMaxSpeed() * 0.9f
+		// * (this.missile.getMaxFlightTime() - this.missile.getFlightTime());
+		float range = this.missile.getMaxSpeed() * this.missile.getFlightTime() * 0.9f;
 		for (ShipAPI s : CombatUtils.getShipsWithinRange(this.missile.getLocation(), range)) {
 			if (this.isTargetShipValid(s)) {
 				if (this.engine.getCustomData().containsKey(prefix + s.toString())) {
@@ -235,45 +240,49 @@ public class AAMMissileAI implements MissileAIPlugin, GuidedMissileAI {
 		// this.selfDestruct(this.missile, this.engine);
 	}
 
-	private boolean isWeaponAvailable(WeaponAPI weapon) {
-		if (weapon == null)
-			return false;
-		if (weapon.isDisabled() || weapon.getCooldownRemaining() > 0f) {
-			return false;
-		}
-		if (this.ship == this.engine.getPlayerShip() && !this.engine.getCombatUI().isAutopilotOn()
-				&& this.ship.getWeaponGroupFor(weapon) == this.ship.getSelectedGroupAPI()) {
-			return false;
-		}
-		if (weapon.usesAmmo()) {
-			if (weapon.getAmmo() == 0) {
-				return false;
-			}
-		}
-		return true;
-	}
+	// private boolean isWeaponAvailable(WeaponAPI weapon) {
+	// if (weapon == null)
+	// return false;
+	// if (weapon.isDisabled() || weapon.getCooldownRemaining() > 0f) {
+	// return false;
+	// }
+	// if (this.ship == this.engine.getPlayerShip() &&
+	// !this.engine.getCombatUI().isAutopilotOn()
+	// && this.ship.getWeaponGroupFor(weapon) == this.ship.getSelectedGroupAPI()) {
+	// return false;
+	// }
+	// if (weapon.usesAmmo()) {
+	// if (weapon.getAmmo() == 0) {
+	// return false;
+	// }
+	// }
+	// return true;
+	// }
 
-	private void updateActiveWeapon(WeaponAPI weapon) {
-		if (this.ship == this.engine.getPlayerShip() && !this.engine.getCombatUI().isAutopilotOn()) {
-			if (this.ship.getWeaponGroupFor(this.missile.getWeapon()) == this.ship.getSelectedGroupAPI()) {
-				return;
-			}
-		}
-		List<WeaponAPI> weapons = (List<WeaponAPI>) this.engine.getCustomData()
-				.get(prefix + this.shipUid + weapon.getId() + "list");
-		int index = weapons.indexOf(weapon) + 1;
-		while (true) {
-			if (index >= weapons.size()) {
-				index = 0;
-			} else if (this.isWeaponAvailable((WeaponAPI) weapons.get(index))) {
-				this.engine.getCustomData().put(prefix + this.shipUid + weapon.getId(), weapons.get(index));
-				break;
-			} else if (index == weapons.indexOf(weapon)) {
-				break;
-			} else
-				index++;
-		}
-	}
+	// private void updateActiveWeapon(WeaponAPI weapon) {
+	// if (this.ship == this.engine.getPlayerShip() &&
+	// !this.engine.getCombatUI().isAutopilotOn()) {
+	// if (this.ship.getWeaponGroupFor(this.missile.getWeapon()) ==
+	// this.ship.getSelectedGroupAPI()) {
+	// return;
+	// }
+	// }
+	// List<WeaponAPI> weapons = (List<WeaponAPI>) this.engine.getCustomData()
+	// .get(prefix + this.shipUid + weapon.getId() + "list");
+	// int index = weapons.indexOf(weapon) + 1;
+	// while (true) {
+	// if (index >= weapons.size()) {
+	// index = 0;
+	// } else if (this.isWeaponAvailable((WeaponAPI) weapons.get(index))) {
+	// this.engine.getCustomData().put(prefix + this.shipUid + weapon.getId(),
+	// weapons.get(index));
+	// break;
+	// } else if (index == weapons.indexOf(weapon)) {
+	// break;
+	// } else
+	// index++;
+	// }
+	// }
 
 	public boolean isInterceptMissile(MissileAPI targetMissile) {
 		if (targetMissile.getMissileAI() instanceof GuidedMissileAI) {
@@ -339,7 +348,7 @@ public class AAMMissileAI implements MissileAIPlugin, GuidedMissileAI {
 				DamageType.FRAGMENTATION, 0.0f, false, false, (Object) missile);
 	}
 
-	void proximityFuse() {
+	private void proximityFuse() {
 		this.engine.applyDamage(this.target, this.target.getLocation(), this.missile.getDamageAmount() * 0.5f,
 				DamageType.HIGH_EXPLOSIVE, 0.0f, false, false, (Object) this.missile.getSource());
 		DamagingExplosionSpec boom = new DamagingExplosionSpec(0.1f, this.missile.getSpec().getExplosionRadius() * 1.2f,

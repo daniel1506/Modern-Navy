@@ -16,6 +16,7 @@ import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.CombatEntityAPI;
 import com.fs.starfarer.api.combat.MissileAPI;
 import com.fs.starfarer.api.combat.WeaponAPI;
+import com.fs.starfarer.api.combat.WeaponAPI.AIHints;
 import com.fs.starfarer.api.combat.GuidedMissileAI;
 import com.fs.starfarer.api.combat.MissileAIPlugin;
 import com.fs.starfarer.api.util.Misc;
@@ -26,7 +27,7 @@ import org.lazywizard.lazylib.combat.AIUtils;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.combat.CombatUtils;
 import org.magiclib.util.MagicRender;
-//import org.magiclib.util.MagicTargeting;
+import org.magiclib.util.MagicTargeting;
 
 //import org.apache.log4j.Logger;
 
@@ -211,6 +212,15 @@ public class RadarInterceptMissileAI implements MissileAIPlugin, GuidedMissileAI
 		for (ShipAPI s : CombatUtils.getShipsWithinRange(this.missile.getLocation(), range)) {
 			if (this.isTargetShipValid(s)) {
 				this.setTarget((CombatEntityAPI) s);
+				return;
+			}
+		}
+		if (!this.missile.getWeapon().hasAIHint(AIHints.PD_ONLY)) {
+			float searchRange = this.missile.getFlightTime() * this.missile.getVelocity().length() * 0.9f;
+			ShipAPI tempTargetShip = MagicTargeting.pickMissileTarget(this.missile,
+					MagicTargeting.targetSeeking.IGNORE_SOURCE, Integer.valueOf((int) searchRange), 120, 1, 1, 1, 1, 1);
+			if (tempTargetShip != null) {
+				this.setTarget(tempTargetShip);
 				return;
 			}
 		}

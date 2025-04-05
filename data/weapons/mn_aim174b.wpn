@@ -1,7 +1,7 @@
 {
   "id": "mn_aim174b",
   "specClass": "projectile",
-  "projectileSpecId": "mn_sm6",
+  "projectileSpecId": "mn_aim174b",
   "type": "MISSILE",
   "size": "SMALL",
   "displayArcRadius": 500,

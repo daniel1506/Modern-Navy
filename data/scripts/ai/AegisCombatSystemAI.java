@@ -20,6 +20,7 @@ import com.fs.starfarer.api.util.Misc;
 import org.lazywizard.lazylib.combat.CombatUtils;
 import org.lazywizard.lazylib.combat.WeaponUtils;
 
+import data.scripts.combat.MNAegisListener;
 //import org.apache.log4j.Logger;
 
 public class AegisCombatSystemAI implements AutofireAIPlugin {
@@ -49,6 +50,11 @@ public class AegisCombatSystemAI implements AutofireAIPlugin {
 
 		this.ship = ship;
 		this.shipUid = ship.toString();
+
+		if (!ship.hasListenerOfClass(MNAegisListener.class)) {
+			MNAegisListener aegisListener = new MNAegisListener(ship);
+			ship.addListener(aegisListener);
+		}
 	}
 
 	public void advance(float amount) {
